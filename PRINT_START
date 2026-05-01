@@ -1,0 +1,72 @@
+[gcode_macro PRINT_START]
+gcode:
+    # ===== Store slicer temps =====
+    SET_GCODE_VARIABLE MACRO=_GLOBAL_VARS VARIABLE=extruder_target VALUE={params.EXTRUDER_TEMP}
+
+    # ===== Basic setup =====
+    M400
+    M220 S100
+    M221 S100
+
+    # ===== Lighting =====
+    M8213
+
+    # ===== Preheat =====
+    M104 S140
+    M140 S{params.BED_TEMP}
+    M190 S{params.BED_TEMP}
+
+    # ===== Homing =====
+    G90
+    G28
+
+    # ===== Nozzle clean =====
+    M729
+
+    # ===== Pressure Advance =====
+    {% if params.PA is defined %}
+        SET_PRESSURE_ADVANCE ADVANCE={params.PA}
+        M400
+    {% endif %}
+
+    # ===== Acceleration =====
+    {% if params.ACCEL is defined %}
+        M204 S{params.ACCEL}
+    {% endif %}
+
+    # ===== Bed Mesh Handling =====
+    BED_MESH_CLEAR
+
+    {% if params.BED_MESH is defined %}
+        {% if params.BED_MESH == 'full' %}
+            BED_MESH_CALIBRATE
+        {% elif params.BED_MESH == 'adaptive' %}
+            BED_MESH_CALIBRATE ADAPTIVE=1
+        {% elif params.BED_MESH != 'none' %}
+            BED_MESH_PROFILE LOAD={params.BED_MESH}
+        {% endif %}
+    {% endif %}
+
+    # ===== Move to purge start =====
+    G1 X{printer.toolhead.axis_maximum.x * 0.5 + 90} Y-1.2 F20000
+    G1 Z0.3 F900
+
+    # ===== Final nozzle temp =====
+    M109 S{params.EXTRUDER_TEMP}
+
+    # ===== Prime line =====
+    M83
+    G92 E0
+    G1 F1800
+    G1 X60 E12
+    G1 Y-0.3
+    G1 X{printer.toolhead.axis_maximum.x * 0.5 - 10} E4.284
+
+    G1 X{printer.toolhead.axis_maximum.x * 0.5 + 10} E2
+    G1 X{printer.toolhead.axis_maximum.x * 0.5 + 30} E2
+    G1 X{printer.toolhead.axis_maximum.x * 0.5 + 50} E2
+
+    # ===== Finish =====
+    G3 I-1 J0 Z0.6 F1200
+    G1 F20000
+    G92 E0
