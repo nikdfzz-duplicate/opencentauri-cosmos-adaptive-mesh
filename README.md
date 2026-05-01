@@ -1,6 +1,7 @@
 ## Compatibility
 
 This setup is designed and tested on:
+- Voron 1.8
 - Voron Trident 
 - Centauri Carbon
 - OpenCentauri / COSMOS firmware
