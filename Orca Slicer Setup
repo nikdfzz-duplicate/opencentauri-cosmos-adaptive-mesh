@@ -1,0 +1,5 @@
+#at Start G-code
+PRINT_START EXTRUDER_TEMP=[nozzle_temperature_initial_layer] BED_TEMP=[bed_temperature_initial_layer_single] ACCEL=[outer_wall_acceleration] PA=[pressure_advance] BED_MESH=adaptive
+
+#at End G-code
+PRINT_END
