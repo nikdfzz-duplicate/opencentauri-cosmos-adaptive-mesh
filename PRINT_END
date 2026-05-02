@@ -42,4 +42,4 @@ gcode:
     M84
 
     # ===== Lights off =====
-    M8212
+    SET_LED LED=case WHITE=0
