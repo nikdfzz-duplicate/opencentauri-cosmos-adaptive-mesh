@@ -9,7 +9,7 @@ gcode:
     M221 S100
 
     # ===== Lighting =====
-    M8213
+    SET_LED LED=case WHITE=1
 
     # ===== Preheat =====
     M104 S140
