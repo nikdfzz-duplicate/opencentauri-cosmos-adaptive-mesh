@@ -23,17 +23,6 @@ gcode:
     # ===== Nozzle clean =====
     M729
 
-    # ===== Pressure Advance =====
-    {% if params.PA is defined %}
-        SET_PRESSURE_ADVANCE ADVANCE={params.PA}
-        M400
-    {% endif %}
-
-    # ===== Acceleration =====
-    {% if params.ACCEL is defined %}
-        M204 S{params.ACCEL}
-    {% endif %}
-
     # ===== Bed Mesh Handling =====
     BED_MESH_CLEAR
 
